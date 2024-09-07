@@ -1,0 +1,162 @@
+CanSat Data Analysis Report
+===========================
+
+1. Basic Statistics:
+
+Tiempo(s):
+  mean: 20.70
+  median: 20.70
+  std: 12.73
+  min: 0.00
+  max: 41.40
+
+Latitud:
+  mean: 0.00
+  median: 0.00
+  std: 0.00
+  min: 0.00
+  max: 0.00
+
+Longitud:
+  mean: 0.00
+  median: 0.00
+  std: 0.00
+  min: 0.00
+  max: 0.00
+
+Presión(Pa):
+  mean: 82850.45
+  median: 82851.02
+  std: 1.54
+  min: 82847.05
+  max: 82852.36
+
+Temperatura(°C):
+  mean: 25.46
+  median: 25.46
+  std: 0.01
+  min: 25.44
+  max: 25.48
+
+Humedad(%):
+  mean: 0.00
+  median: 0.00
+  std: 0.00
+  min: 0.00
+  max: 0.00
+
+Altitud_BMP280(m):
+  mean: -35.77
+  median: -35.83
+  std: 0.16
+  min: -35.97
+  max: -35.43
+
+Altitud_Relativa(m):
+  mean: 3.34
+  median: 3.28
+  std: 0.16
+  min: 3.14
+  max: 3.68
+
+Altitud_GPS(m):
+  mean: 0.00
+  median: 0.00
+  std: 0.00
+  min: 0.00
+  max: 0.00
+
+AccX(g):
+  mean: -0.06
+  median: -0.06
+  std: 0.00
+  min: -0.07
+  max: -0.06
+
+AccY(g):
+  mean: -0.05
+  median: -0.05
+  std: 0.00
+  min: -0.06
+  max: -0.05
+
+AccZ(g):
+  mean: 0.97
+  median: 0.97
+  std: 0.00
+  min: 0.96
+  max: 0.98
+
+GyroX(°/s):
+  mean: -0.78
+  median: -0.77
+  std: 0.16
+  min: -1.29
+  max: -0.45
+
+GyroY(°/s):
+  mean: -2.40
+  median: -2.40
+  std: 0.13
+  min: -2.61
+  max: -2.21
+
+GyroZ(°/s):
+  mean: 0.50
+  median: 0.48
+  std: 0.12
+  min: 0.34
+  max: 0.84
+
+MagX(μT):
+  mean: 764.00
+  median: 764.00
+  std: 0.00
+  min: 764.00
+  max: 764.00
+
+MagY(μT):
+  mean: 24320.00
+  median: 24320.00
+  std: 0.00
+  min: 24320.00
+  max: 24320.00
+
+MagZ(μT):
+  mean: 29786.00
+  median: 29786.00
+  std: 0.00
+  min: 29786.00
+  max: 29786.00
+
+2. Altitude Analysis:
+
+Altitud_BMP280(m):
+  Max altitude: -35.43 m
+  Min altitude: -35.97 m
+  Average altitude: -35.77 m
+
+Altitud_Relativa(m):
+  Max altitude: 3.68 m
+  Min altitude: 3.14 m
+  Average altitude: 3.34 m
+
+Altitud_GPS(m):
+  Max altitude: 0.00 m
+  Min altitude: 0.00 m
+  Average altitude: 0.00 m
+
+3. Temperature and Pressure Correlation:
+Correlation coefficient: -0.54
+
+4. Acceleration Analysis:
+Max total acceleration: 0.98 g
+Average total acceleration: 0.97 g
+
+5. GPS Data:
+Starting coordinates: Lat 0.000000, Lon 0.000000
+Ending coordinates: Lat 0.000000, Lon 0.000000
+
+6. Data Completeness:
+Number of missing values per column:
+Series([], dtype: int64)
