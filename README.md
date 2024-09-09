@@ -1,4 +1,3 @@
-Claro, aquí tienes una versión mejorada del README.md con estilos que se verán bien en GitHub:
 markdownCopy# 🛰️ SensorDataApp - TULCAN-SAT
 
 <p align="center">
