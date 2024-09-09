@@ -1,5 +1,3 @@
-Aquí tienes un README.md para el archivo Python proporcionado:
-SensorDataApp
 SensorDataApp es una aplicación de interfaz gráfica de usuario (GUI) desarrollada en Python para visualizar y registrar datos de sensores en tiempo real. Está diseñada específicamente para el proyecto TULCAN-SAT, utilizando datos de diversos sensores como GPS, acelerómetro, giroscopio, magnetómetro, barómetro y termómetro.
 Características
 
