@@ -1,7 +1,7 @@
 markdownCopy# 🛰️ SensorDataApp - TULCAN-SAT
 
 <p align="center">
-  <img src="Logo TUL-CAN SAT (1).png" alt="TULCAN-SAT Logo" width="200"/>
+  <img src="Logo TUL-CAN SAT.png" alt="TULCAN-SAT Logo" width="200"/>
 </p>
 
 <p align="center">
