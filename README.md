@@ -68,18 +68,20 @@ Copy3. La aplicación se iniciará y comenzará a recopilar y mostrar datos en t
 - Un archivo CSV con todos los datos recopilados
 
 ## 📂 Estructura del Proyecto
+
 SensorDataApp/
-│
-├── sensor_data_app.py     # Script principal
-├── Logo TUL-CAN SAT (1).png  # Logo de TULCAN-SAT
-│
-└── capturas/              # Directorio para capturas y datos
-├── captura_interfaz.png
-├── Aceleracion.png
-├── Giroscopio.png
-├── ...
-└── datos_sensor.csv
-Copy
+├── sensor_data_app.py         # Script principal
+├── Logo TUL-CAN SAT (1).png   # Logo de TULCAN-SAT
+└── capturas/                  # Directorio para capturas y datos
+    ├── captura_interfaz.png
+    ├── Aceleracion.png
+    ├── Giroscopio.png
+    ├── Magnetometro.png
+    ├── Temperatura.png
+    ├── Presion.png
+    ├── Altitud.png
+    └── datos_sensor.csv
+
 ## ⚙️ Personalización
 
 - Modifica las constantes al inicio del script para ajustar los cálculos de altitud.
