@@ -1,5 +1,8 @@
-def crear_persona(nombre, edadad, ciudad, municipio = "popayan"):
-    print(f"Nombre: {nombre}", f"Edad: {edadad}", f"Ciudad: {ciudad}", f"Municipio: {municipio}", sep="\n") 
-    
-    
-crear_persona(33, "juan", "palmira", )
+def modificar_argumentos(*args):
+    lista_argumentos = list(args)
+    lista_argumentos[0] = "modificado"
+    return lista_argumentos
+
+
+resultado = modificar_argumentos("original", 2, 3, 4)
+print(resultado)
