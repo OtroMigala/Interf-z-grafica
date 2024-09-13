@@ -188,7 +188,7 @@ class SensorDataApp:
                 ])
 
     def read_serial_data(self):
-        ser = serial.Serial('COM3', 115200)  # Asegúrate de que el puerto COM sea el correcto
+        ser = serial.Serial('COM3', 115200)  # revisarq que el  de que el puerto COM sea el correcto
         while True:
             try:
                 line = ser.readline().decode('utf-8').strip()

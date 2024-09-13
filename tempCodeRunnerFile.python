@@ -1,0 +1,5 @@
+def crear_persona(nombre, edadad, ciudad, municipio = "popayan"):
+    print(f"Nombre: {nombre}", f"Edad: {edadad}", f"Ciudad: {ciudad}", f"Municipio: {municipio}", sep="\n") 
+    
+    
+crear_persona(33, "juan", "palmira", )
