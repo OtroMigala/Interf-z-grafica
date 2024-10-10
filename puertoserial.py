@@ -10,7 +10,7 @@ def main():
             # Lee la línea desde el puerto serial
             line = ser.readline().decode('utf-8').strip()
             if line:
-                print(f"Datos recibidos: {line}")
+                print(f"{line}")
                 
     except serial.SerialException as e:
         print(f"Error al abrir el puerto serial: {e}")

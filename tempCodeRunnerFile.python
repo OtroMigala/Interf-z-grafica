@@ -1,8 +1,0 @@
-def modificar_argumentos(*args):
-    lista_argumentos = list(args)
-    lista_argumentos[0] = "modificado"
-    return lista_argumentos
-
-
-resultado = modificar_argumentos("original", 2, 3, 4)
-print(resultado)

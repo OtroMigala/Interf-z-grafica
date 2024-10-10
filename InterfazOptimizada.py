@@ -12,6 +12,9 @@ import shutil
 from PIL import ImageGrab
 from PIL import Image, ImageTk
 import csv
+import folium
+from tkhtmlview import HTMLLabel
+
 # Constantes para el cálculo de altitud
 PRESSURE_SEA_LEVEL = 101325  # Presión al nivel del mar en Pa
 TEMPERATURE_LAPSE_RATE = 0.0065  # K/m
@@ -60,12 +63,24 @@ class SensorDataApp:
         left_frame = tk.Frame(main_frame, bg='#8e8dab')
         left_frame.pack(side=tk.LEFT, padx=10, pady=10, fill=tk.BOTH, expand=True)
 
-        # Configuración del mapa
-        self.map_widget = TkinterMapView(left_frame, width=600, height=400, corner_radius=0)
+        # Configuración del mapa usando Folium
+        self.map_widget = HTMLLabel(left_frame, html='')
         self.map_widget.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
-        self.map_widget.set_position(POPAYAN_LAT, POPAYAN_LON)
-        self.map_widget.set_zoom(15)
+        
+        # Inicializa el mapa de Folium
+        self.m = folium.Map(location=[POPAYAN_LAT, POPAYAN_LON], zoom_start=15)
         self.marker = None
+        self.update_map(POPAYAN_LAT, POPAYAN_LON)  # Coloca el marcador inicial
+
+        # Variables para controlar la actualización del mapa
+        self.map_update_lock = threading.Lock()
+        self.new_coordinates = None
+        self.last_map_update = 0
+        self.map_update_interval = 2  # segundos
+
+        # Inicia el hilo de actualización del mapa
+        self.map_update_thread = threading.Thread(target=self.map_update_loop, daemon=True)
+        self.map_update_thread.start()
 
         # Frame para valores en tiempo real
         self.real_time_frame = tk.Frame(left_frame, bg='#8e8dab', width=600, height=400)
@@ -120,9 +135,6 @@ class SensorDataApp:
         self.serial_thread.start()
         
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
-        
-        self.last_map_update = 0
-        self.map_update_interval = 2
         
     def on_closing(self):
         # Guardar captura de pantalla de la interfaz completa
@@ -188,53 +200,42 @@ class SensorDataApp:
                 ])
 
     def read_serial_data(self):
-        ser = serial.Serial('COM3', 115200)  # Asegúrate de que el puerto COM sea el correcto
-        print("Conectado al puerto serial COM3")
-        buffer = ""
+        ser = serial.Serial('COM4', 115200)  # Asegúrate de que el puerto COM sea el correcto
         while True:
             try:
                 line = ser.readline().decode('utf-8').strip()
-                print(f"Datos recibidos: {line}")  # Imprime cada línea recibida
-                
                 if line.startswith('+RCV='):
-                    buffer = line
-                elif buffer.startswith('+RCV=') and not line.startswith('+RCV='):
-                    buffer += line
-                    parts = buffer.split(',')
-                    if len(parts) >= 20:  # Asegúrate de que tenemos todos los datos necesarios
-                        time_str = parts[2].split('=')[1]
-                        lat = float(parts[3].split('=')[1])
-                        lon = float(parts[4].split('=')[1])
-                        temp = float(parts[5].split('=')[1].replace('C', ''))
-                        press = float(parts[6].split('=')[1].replace('Pa', ''))
-                        rel_alt = float(parts[7].split('=')[1].replace('m', ''))
-                        acc_x = float(parts[8].split('=')[1])
-                        acc_y = float(parts[9].split('=')[1])
-                        acc_z = float(parts[10].split('=')[1])
-                        gyro_x = float(parts[11].split('=')[1])
-                        gyro_y = float(parts[12].split('=')[1])
-                        gyro_z = float(parts[13].split('=')[1])
-                        mag_x = float(parts[14].split('=')[1])
-                        mag_y = float(parts[15].split('=')[1])
-                        mag_z = float(parts[16].split('=')[1])
-                        
-                        print(f"Datos procesados: Time={time_str}, Lat={lat}, Lon={lon}, Temp={temp}, Press={press}, RelAlt={rel_alt}")
-                        
-                        self.update_data(time_str, lat, lon, temp, press, rel_alt, 
-                                        acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, 
-                                        mag_x, mag_y, mag_z)
-                    else:
-                        print(f"Formato de datos inesperado: {buffer}")
-                    buffer = ""  # Limpiar el buffer después de procesar
+                    data = line.split(',')
+                    time_str = data[2].split('=')[1]
+                    lat = float(data[3].split('=')[1])
+                    lon = float(data[4].split('=')[1])
+                    temp = float(data[5].split('=')[1].replace('C', ''))
+                    press = float(data[6].split('=')[1].replace('Pa', ''))
+                    hum = float(data[7].split('=')[1].replace('%', ''))
+                    bmp280_alt = float(data[8].split('=')[1].replace('m', ''))
+                    rel_alt = float(data[9].split('=')[1].replace('m', ''))
+                    gps_alt = float(data[10].split('=')[1].replace('m', ''))
+                    acc_x = float(data[11].split('=')[1])
+                    acc_y = float(data[12].split('=')[1])
+                    acc_z = float(data[13].split('=')[1])
+                    gyro_x = float(data[14].split('=')[1])
+                    gyro_y = float(data[15].split('=')[1])
+                    gyro_z = float(data[16].split('=')[1])
+                    mag_x = float(data[17].split('=')[1])
+                    mag_y = float(data[18].split('=')[1])
+                    mag_z = float(data[19].split('=')[1])
+                    
+                    if lat != 0 and lon != 0:
+                        self.root.after(0, self.update_map, lat, lon)
+                
+                    self.update_data(time_str, lat, lon, temp, press, hum, bmp280_alt, rel_alt, gps_alt,
+                                    acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z)
             except Exception as e:
-                print(f"Error leyendo datos seriales: {e}")
-                print(f"Línea problemática: {buffer}")
+                print(f"Error reading serial data: {e}")
+                print(f"Problematic line: {line}")
             
-            time.sleep(0.1)  # Pequeña pausa para evitar sobrecarga del CPU   
-        
-    def update_data(self, time_str, lat, lon, temp, press, rel_alt, 
-                    acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, 
-                    mag_x, mag_y, mag_z):
+    def update_data(self, time_str, lat, lon, temp, press, hum, bmp280_alt, rel_alt, gps_alt,
+                    acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z):
         if self.start_time is None:
             self.start_time = time.time()
         
@@ -243,9 +244,6 @@ class SensorDataApp:
         self.times.append(elapsed_time)
         self.lat_data.append(lat)
         self.lon_data.append(lon)
-        self.temp_data.append(temp)
-        self.press_data.append(press)
-        self.rel_altitude_data.append(rel_alt)
         self.acc_data['x'].append(acc_x)
         self.acc_data['y'].append(acc_y)
         self.acc_data['z'].append(acc_z)
@@ -255,36 +253,40 @@ class SensorDataApp:
         self.mag_data['x'].append(mag_x)
         self.mag_data['y'].append(mag_y)
         self.mag_data['z'].append(mag_z)
+        self.temp_data.append(temp)
+        self.press_data.append(press)
+        self.hum_data.append(hum)
+        self.altitude_data.append(bmp280_alt)
+        self.rel_altitude_data.append(rel_alt)
+        self.gps_altitude_data.append(gps_alt)
 
-        # Limitar la cantidad de datos almacenados
-        max_data_points = 100  # Ajusta este valor según sea necesario
-        if len(self.times) > max_data_points:
-            self.times = self.times[-max_data_points:]
-            self.lat_data = self.lat_data[-max_data_points:]
-            self.lon_data = self.lon_data[-max_data_points:]
-            self.temp_data = self.temp_data[-max_data_points:]
-            self.press_data = self.press_data[-max_data_points:]
-            self.rel_altitude_data = self.rel_altitude_data[-max_data_points:]
-            for key in self.acc_data:
-                self.acc_data[key] = self.acc_data[key][-max_data_points:]
-            for key in self.gyro_data:
-                self.gyro_data[key] = self.gyro_data[key][-max_data_points:]
-            for key in self.mag_data:
-                self.mag_data[key] = self.mag_data[key][-max_data_points:]
-
-        print(f"Datos actualizados: Tiempo={elapsed_time:.2f}, Temp={temp:.2f}, Press={press:.2f}, RelAlt={rel_alt:.2f}")
-
-        # Actualiza la interfaz
-        self.root.after(0, self.update_map, lat, lon)
+        # Actualiza las coordenadas para el mapa
+        if lat != 0 and lon != 0:
+            self.new_coordinates = (lat, lon)
+            
         self.root.after(0, self.update_plots)
-        self.root.after(0, self.update_real_time_values, lat, lon, press, temp, rel_alt,
-                        acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z)
-    
-      
+        self.root.after(0, self.update_real_time_values, lat, lon, press, temp, hum, bmp280_alt, rel_alt, gps_alt,
+                    acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z)
+
+            
+        self.root.after(0, self.update_plots)
+        self.root.after(0, self.update_real_time_values, lat, lon, press, temp, hum, bmp280_alt, rel_alt, gps_alt,
+                    acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z)  
+         
     def update_map(self, lat, lon):
         if self.marker:
             self.marker.delete()
         self.marker = self.map_widget.set_marker(lat, lon)
+
+    def map_update_loop(self):
+        while True:
+            current_time = time.time()
+            if self.new_coordinates and current_time - self.last_map_update > self.map_update_interval:
+                lat, lon = self.new_coordinates
+                self.root.after(0, self.update_map, lat, lon)
+                self.new_coordinates = None
+                self.last_map_update = current_time
+            time.sleep(0.1)            
             
     def update_plots(self):
         for ax in self.axs.flat:
@@ -328,14 +330,17 @@ class SensorDataApp:
         self.fig.tight_layout()
         self.canvas.draw()
 
-    def update_real_time_values(self, lat, lon, press, temp, rel_alt, 
+    def update_real_time_values(self, lat, lon, press, temp, hum, bmp280_alt, rel_alt, gps_alt, 
                                 acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, 
                                 mag_x, mag_y, mag_z):
         self.labels['Latitud'].config(text=f"Latitud: {lat:.6f}")
         self.labels['Longitud'].config(text=f"Longitud: {lon:.6f}")
         self.labels['Presión'].config(text=f"Presión: {press:.2f} Pa")
         self.labels['Temperatura'].config(text=f"Temperatura: {temp:.2f} °C")
+        self.labels['Humedad'].config(text=f"Humedad: {hum:.2f} %")
+        self.labels['Altitud BMP280'].config(text=f"Altitud BMP280: {bmp280_alt:.2f} m")
         self.labels['Altitud Relativa'].config(text=f"Altitud Rel: {rel_alt:.2f} m")
+        self.labels['Altitud GPS'].config(text=f"Altitud GPS: {gps_alt:.2f} m")
         self.labels['Aceleración X'].config(text=f"Aceleración X: {acc_x:.2f} g")
         self.labels['Aceleración Y'].config(text=f"Aceleración Y: {acc_y:.2f} g")
         self.labels['Aceleración Z'].config(text=f"Aceleración Z: {acc_z:.2f} g")
@@ -345,8 +350,6 @@ class SensorDataApp:
         self.labels['Magnetómetro X'].config(text=f"Magnetómetro X: {mag_x:.2f} μT")
         self.labels['Magnetómetro Y'].config(text=f"Magnetómetro Y: {mag_y:.2f} μT")
         self.labels['Magnetómetro Z'].config(text=f"Magnetómetro Z: {mag_z:.2f} μT")
-        
-        
 if __name__ == "__main__":
     root = tk.Tk()
     app = SensorDataApp(root)
