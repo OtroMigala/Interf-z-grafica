@@ -192,36 +192,52 @@ class SensorDataApp:
         while True:
             try:
                 line = ser.readline().decode('utf-8').strip()
+                
+                # Verificar si la línea contiene datos en el formato antiguo (+RCV=)
                 if line.startswith('+RCV='):
                     data = line.split(',')
                     time_str = data[2].split('=')[1]
                     lat = float(data[3].split('=')[1])
                     lon = float(data[4].split('=')[1])
                     temp = float(data[5].split('=')[1].replace('C', ''))
-                    press = float(data[6].split('=')[1].replace('Pa', ''))
-                    hum = float(data[7].split('=')[1].replace('%', ''))
-                    bmp280_alt = float(data[8].split('=')[1].replace('m', ''))
-                    rel_alt = float(data[9].split('=')[1].replace('m', ''))
-                    gps_alt = float(data[10].split('=')[1].replace('m', ''))
-                    acc_x = float(data[11].split('=')[1])
-                    acc_y = float(data[12].split('=')[1])
-                    acc_z = float(data[13].split('=')[1])
-                    gyro_x = float(data[14].split('=')[1])
-                    gyro_y = float(data[15].split('=')[1])
-                    gyro_z = float(data[16].split('=')[1])
-                    mag_x = float(data[17].split('=')[1])
-                    mag_y = float(data[18].split('=')[1])
-                    mag_z = float(data[19].split('=')[1])
+                    press = float(data   [6].split('=')[1].replace('Pa', ''))
+                    rel_alt = float(data[7].split('=')[1].replace('m', ''))
+                    acc_x = float(data[8].split('=')[1])
+                    acc_y = float(data[9].split('=')[1])
+                    acc_z = float(data[10].split('=')[1])
+                    gyro_x = float(data[11].split('=')[1])
+                    gyro_y = float(data[12].split('=')[1])
+                    gyro_z = float(data[13].split('=')[1])
+                    mag_x = float(data[14].split('=')[1])
+                    mag_y = float(data[15].split('=')[1])
+                    mag_z = float(data[16].split('=')[1])
+
+                # Verificar si la línea contiene datos en el nuevo formato (sin +RCV=)
+                else:
+                    data = line.split(',')
+                    temp = float(data[1].split('=')[1].replace('C', ''))
+                    press = float(data[2].split('=')[1].replace('Pa', ''))
+                    rel_alt = float(data[3].split('=')[1].replace('m', ''))
+                    acc_x = float(data[4].split('=')[1])
+                    acc_y = float(data[5].split('=')[1])
+                    acc_z = float(data[6].split('=')[1])
+                    gyro_x = float(data[7].split('=')[1])
+                    gyro_y = float(data[8].split('=')[1])
+                    gyro_z = float(data[9].split('=')[1])
+                    mag_x = float(data[10].split('=')[1])
+                    mag_y = float(data[11].split('=')[1])
+                    mag_z = float(data[12].split('=')[1])
                     
-                    if lat != 0 and lon != 0:
-                        self.root.after(0, self.update_map, lat, lon)
-                
-                    self.update_data(time_str, lat, lon, temp, press, hum, bmp280_alt, rel_alt, gps_alt,
-                                    acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z)
+                    lat, lon = 0.0, 0.0  # Si no se proporcionan latitud y longitud, usar 0.
+
+                # Actualizar datos (usando el método ya existente)
+                self.update_data("", lat, lon, temp, press, 0, rel_alt, rel_alt, 0, acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z)
+            
             except Exception as e:
                 print(f"Error reading serial data: {e}")
                 print(f"Problematic line: {line}")
-            
+
+         
     def update_data(self, time_str, lat, lon, temp, press, hum, bmp280_alt, rel_alt, gps_alt,
                     acc_x, acc_y, acc_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z):
         if self.start_time is None:

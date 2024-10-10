@@ -4,11 +4,11 @@ CanSat Data Analysis Report
 1. Basic Statistics:
 
 Tiempo(s):
-  mean: 20.70
-  median: 20.70
-  std: 12.73
+  mean: 577.36
+  median: 568.99
+  std: 333.88
   min: 0.00
-  max: 41.40
+  max: 1195.97
 
 Latitud:
   mean: 0.00
@@ -25,18 +25,18 @@ Longitud:
   max: 0.00
 
 Presión(Pa):
-  mean: 82850.45
-  median: 82851.02
-  std: 1.54
-  min: 82847.05
-  max: 82852.36
+  mean: 75025.53
+  median: 75184.30
+  std: 521.32
+  min: 73026.75
+  max: 75202.20
 
 Temperatura(°C):
-  mean: 25.46
-  median: 25.46
-  std: 0.01
-  min: 25.44
-  max: 25.48
+  mean: 36.22
+  median: 36.03
+  std: 0.68
+  min: 35.18
+  max: 37.74
 
 Humedad(%):
   mean: 0.00
@@ -46,18 +46,18 @@ Humedad(%):
   max: 0.00
 
 Altitud_BMP280(m):
-  mean: -35.77
-  median: -35.83
-  std: 0.16
-  min: -35.97
-  max: -35.43
+  mean: 60.59
+  median: 43.58
+  std: 55.87
+  min: 41.68
+  max: 275.01
 
 Altitud_Relativa(m):
-  mean: 3.34
-  median: 3.28
-  std: 0.16
-  min: 3.14
-  max: 3.68
+  mean: 60.59
+  median: 43.58
+  std: 55.87
+  min: 41.68
+  max: 275.01
 
 Altitud_GPS(m):
   mean: 0.00
@@ -67,46 +67,46 @@ Altitud_GPS(m):
   max: 0.00
 
 AccX(g):
-  mean: -0.06
-  median: -0.06
-  std: 0.00
-  min: -0.07
-  max: -0.06
+  mean: 0.05
+  median: -0.01
+  std: 0.26
+  min: -0.88
+  max: 1.01
 
 AccY(g):
-  mean: -0.05
-  median: -0.05
-  std: 0.00
-  min: -0.06
-  max: -0.05
+  mean: 0.08
+  median: 0.09
+  std: 0.26
+  min: -0.94
+  max: 0.95
 
 AccZ(g):
-  mean: 0.97
-  median: 0.97
-  std: 0.00
-  min: 0.96
-  max: 0.98
+  mean: 0.86
+  median: 0.95
+  std: 0.23
+  min: -0.40
+  max: 1.31
 
 GyroX(°/s):
-  mean: -0.78
-  median: -0.77
-  std: 0.16
-  min: -1.29
-  max: -0.45
+  mean: -0.32
+  median: -0.66
+  std: 26.10
+  min: -144.36
+  max: 249.99
 
 GyroY(°/s):
-  mean: -2.40
-  median: -2.40
-  std: 0.13
-  min: -2.61
-  max: -2.21
+  mean: -3.57
+  median: -2.92
+  std: 23.52
+  min: -155.24
+  max: 249.99
 
 GyroZ(°/s):
-  mean: 0.50
-  median: 0.48
-  std: 0.12
-  min: 0.34
-  max: 0.84
+  mean: -2.04
+  median: 0.31
+  std: 32.53
+  min: -214.71
+  max: 249.99
 
 MagX(μT):
   mean: 764.00
@@ -132,14 +132,14 @@ MagZ(μT):
 2. Altitude Analysis:
 
 Altitud_BMP280(m):
-  Max altitude: -35.43 m
-  Min altitude: -35.97 m
-  Average altitude: -35.77 m
+  Max altitude: 275.01 m
+  Min altitude: 41.68 m
+  Average altitude: 60.59 m
 
 Altitud_Relativa(m):
-  Max altitude: 3.68 m
-  Min altitude: 3.14 m
-  Average altitude: 3.34 m
+  Max altitude: 275.01 m
+  Min altitude: 41.68 m
+  Average altitude: 60.59 m
 
 Altitud_GPS(m):
   Max altitude: 0.00 m
@@ -147,10 +147,10 @@ Altitud_GPS(m):
   Average altitude: 0.00 m
 
 3. Temperature and Pressure Correlation:
-Correlation coefficient: -0.54
+Correlation coefficient: -0.49
 
 4. Acceleration Analysis:
-Max total acceleration: 0.98 g
+Max total acceleration: 1.62 g
 Average total acceleration: 0.97 g
 
 5. GPS Data:
