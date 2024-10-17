@@ -50,7 +50,7 @@ markdownCopy# 🛰️ SensorDataApp - TULCAN-SAT
 ## 📥 Instalación
 
 1. Clona este repositorio:
-git clone [https://github.com/OtroMigala/SensorDataApp.git](https://github.com/OtroMigala/Interfaz-Grafica-CANSAT)
+git clone https://github.com/OtroMigala/Interfaz-Grafica-CANSAT
 Copy2. Navega al directorio del proyecto:
 cd SensorDataApp
 Copy3. Instala las dependencias necesarias:
